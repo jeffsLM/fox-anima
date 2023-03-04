@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { View, Dimensions } from 'react-native';
+import { View } from 'react-native';
 
-import { Header } from '../components/Header'
-import { HeroCorousel } from '../components/HeroCorousel'
-import { AnimeList } from '../components/AnimeList'
+import { Header } from '../../components/Header'
+import { AnimeList } from '../../components/AnimeList'
 
-import { api } from '../services/api'
-import { AnimeProps } from '../types/AnimeProps'
+import { api } from '../../services/api'
+import { AnimeProps } from '../../types';
 
 import { Container, HeaderContainer, Scroll } from './styles';
 
 
-export const Home: React.FC = () => {
-  const { width } = Dimensions.get('window');
+export const Home: React.FC = ({ navigation }: any) => {
   const [lastAnimes, setLastAnimes] = useState<AnimeProps[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
+
 
   const getLastAnime = async () => {
     await api.post<AnimeProps[]>('/fox/last')
@@ -23,6 +22,12 @@ export const Home: React.FC = () => {
         setIsLoading(false);
       })
       .catch(e => setIsLoading(false));
+  }
+
+  const handleSelectAnime = (data: AnimeProps) => {
+    navigation.navigate('AnimeDetail', {
+      params: data,
+    })
   }
 
   useEffect(() => { getLastAnime() }, [])
@@ -34,7 +39,7 @@ export const Home: React.FC = () => {
       </HeaderContainer>
       <Scroll>
         <View style={{ flex: 1 }}>
-          {!isLoading && <AnimeList data={lastAnimes} />}
+          {!isLoading && <AnimeList label='Lançamentos' autoFocus oddBackground data={lastAnimes} handleSelectAnime={handleSelectAnime} />}
         </View>
       </Scroll>
     </Container>

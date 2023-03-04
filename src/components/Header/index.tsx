@@ -5,9 +5,11 @@ import { Container, Img, ContainerImage, Title, ContentHeader, ToachContainer } 
 
 import foxIcon from '../../assets/fox.png'
 
-const Header: React.FC<TouchableOpacityProps> = ({ ...props }) => {
+interface HeaderProps extends TouchableOpacityProps {
+  title?: string;
+}
 
-
+const Header: React.FC<HeaderProps> = ({ title, ...props }) => {
 
   const [isFocused, setIsFocused] = useState(false)
   const handleOnFocus = () => {
@@ -17,7 +19,6 @@ const Header: React.FC<TouchableOpacityProps> = ({ ...props }) => {
     setIsFocused(false)
   }
 
-
   return (
     <Container>
       <ContentHeader>
@@ -26,7 +27,7 @@ const Header: React.FC<TouchableOpacityProps> = ({ ...props }) => {
             foxIcon
           } />
         </ContainerImage>
-        <Title>Fox Anima</Title>
+        <Title>Fox Anima {title ? ' | ' + title : ''}</Title>
       </ContentHeader>
 
       <ToachContainer onFocus={handleOnFocus} onBlur={handleBlur} isFocused={isFocused}>

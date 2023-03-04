@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlatList, View } from 'react-native';
+import { FlatList, Text, View } from 'react-native';
 
 import { AnimeProps } from '../../types/AnimeProps';
 
@@ -12,8 +12,18 @@ export const List = styled(FlatList as new () => FlatList<AnimeProps>).attrs({
   windowSize: 3,
 })``;
 
-export const Container = styled(View)`
+interface ContainerProps {
+  oddBackground?: boolean;
+}
+
+export const Container = styled(View)<ContainerProps>`
   flex: 1;
-  weight: 200px;
-  height: 100px;
+  padding: 12px 26px 12px 12px;
+  ${(props) => (props.oddBackground ? 'background: #282c4d;' : '')}
+`;
+
+export const Label = styled(Text)`
+  color: #ffff;
+  font-family: 'Poppins-Regular';
+  font-size: 16px;
 `;

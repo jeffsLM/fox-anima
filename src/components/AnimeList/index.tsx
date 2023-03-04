@@ -4,28 +4,29 @@ import { FlatList, ListRenderItemInfo } from 'react-native';
 import { DisplayAnime } from '../DisplayAnime'
 import { AnimeProps } from '../../types/AnimeProps'
 
-import { List, Container } from './styles';
+import { List, Container, Label } from './styles';
 
 interface AnimeListProps {
-  data: AnimeProps[]
-
+  data: AnimeProps[];
+  label: string;
+  oddBackground?: boolean;
+  autoFocus?: boolean;
+  handleSelectAnime: (data: AnimeProps) => void;
 };
 
-const AnimeList: React.FC<AnimeListProps> = ({ data }) => {
+const AnimeList: React.FC<AnimeListProps> = ({ data, label, autoFocus = false, oddBackground = false, handleSelectAnime }) => {
   return (
-    <Container>
+    <Container oddBackground={oddBackground}>
+      <Label>{label}</Label>
       <FlatList
+        showsHorizontalScrollIndicator={false}
         horizontal
         data={data}
-        renderItem={renderItemAnime}
+        renderItem={({ item, index }) => <DisplayAnime hasTVPreferredFocus={autoFocus && index === 0} onPress={() => handleSelectAnime(item)} source={{ uri: item.image }} animeData={item} />}
         keyExtractor={(item) => item.universal_anime_id}
       />
     </Container>
   );
-}
-
-const renderItemAnime = (data: ListRenderItemInfo<AnimeProps>) => {
-  return <DisplayAnime source={{ uri: data.item.image }} animeData={data.item} />
 }
 
 export { AnimeList };
