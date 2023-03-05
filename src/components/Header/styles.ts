@@ -30,7 +30,7 @@ export const ContentHeader = styled(View)`
 export const Title = styled(Text)`
   color: #fff;
   font-family: 'Poppins-Regular';
-  font-size: 20px;
+  font-size: 16px;
   line-height: 24px;
 `;
 

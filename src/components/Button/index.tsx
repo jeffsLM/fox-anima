@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { ButtonProps } from 'react-native'
-import { LinearGradientColor, Play, Flag, Button as UIButton } from './styles';
+import { LinearGradientColor, Play, Flag, Button as UIButton, Content } from './styles';
 
 interface ButtonComponentsProps extends ButtonProps {
-  margin?: string;
+  title: string;
+  width: string;
+  mb?: string;
+  active?: boolean;
 }
 
-const Button: React.FC<ButtonComponentsProps> = ({ title }) => {
+const Button: React.FC<ButtonComponentsProps> = ({ title, active, width, mb = false, ...props }) => {
 
   const [isFocused, setIsFocused] = useState(false)
   const handleOnFocus = () => {
@@ -16,11 +19,14 @@ const Button: React.FC<ButtonComponentsProps> = ({ title }) => {
     setIsFocused(false)
   }
   return (
-    <UIButton isFocused={isFocused} onFocus={handleOnFocus} onBlur={handleBlur} >
-      <LinearGradientColor>
+    <UIButton isFocused={isFocused} active={active} width={width} mb={mb} onFocus={handleOnFocus} onBlur={handleBlur} {...props}>
+      {active ? (<LinearGradientColor>
         <Play color="#FFF" fill="#FFF" size={24} />
         <Flag>{title}</Flag>
-      </LinearGradientColor>
+      </LinearGradientColor>) : <Content>
+        <Play color="#FFF" fill="#FFF" size={24} />
+        <Flag>{title}</Flag>
+      </Content>}
     </UIButton>
   );
 }

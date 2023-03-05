@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Home } from '../screens/Home/Home';
-import { AnimeDetail } from '../screens/AnimeDetail/AnimeDetail';
+import { Player } from '../screens/Player/Player';
+import { Episodes } from '../screens/Episodes/Episodes';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -15,7 +16,8 @@ export const Navigations: React.FC = () => {
         headerShown: false
       }}>
         <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="AnimeDetail" component={AnimeDetail} />
+        <Stack.Screen name="Episodes" component={Episodes} />
+        <Stack.Screen name="Player" component={Player} />
       </Stack.Navigator>
     </NavigationContainer>
   );

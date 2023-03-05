@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { PlayIcon } from 'react-native-heroicons/solid';
 
@@ -8,6 +8,15 @@ export const LinearGradientColor = styled(LinearGradient).attrs({
   start: { x: 0.0, y: 0.25 },
   end: { x: 0.5, y: 1.0 },
 })`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 5px;
+  padding: 6.5px;
+`;
+export const Content = styled(View)`
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -29,9 +38,12 @@ export const Flag = styled(Text)`
 
 type ButtonProps = {
   isFocused: boolean;
+  width: string;
+  mb: string;
 };
 export const Button = styled(TouchableOpacity)<ButtonProps>`
-  width: 15%;
+  width: ${({ width }) => (width ? width : '15px;')};
+  margin-bottom: ${({ mb }) => (mb ? mb : '0px;')};
   ${(props) =>
     props.isFocused &&
     `

@@ -19,6 +19,7 @@ interface ContainerProps {
 export const Container = styled(View)<ContainerProps>`
   flex: 1;
   padding: 12px 26px 12px 12px;
+  min-height: 250px;
   ${(props) => (props.oddBackground ? 'background: #282c4d;' : '')}
 `;
 
