@@ -16,11 +16,36 @@ import { Container, HeaderContainer, Scroll, Hero, Shadow, Title, Subtitle, Grid
 export const Episodes: React.FC = ({ navigation, route }: any) => {
   const data: EpisodeProps = route.params.params;
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingNewEp, setIsLoadingNewEp] = useState(false);
+  const [buttonText, setButtonText] = useState('more Ep');
   const [resolution, setResolution] = useState('360p');
   const [episodes, setEpisodes] = useState<EpisodeProps[]>([]);
 
 
+  const getNewEp = async () => {
+    setIsLoadingNewEp(true)
+    var term = data.title;
+    var sub = data.sub === 'Dublado' ? ' Dublado' : '';
+    term = term + sub
+
+    await api.post<EpisodeProps[]>('/queue/create', { term: term, process: 'N', created_at: new Date(), updated_at: new Date() })
+      .then(async (e) => {
+        await charge();
+      })
+      .catch(e => { setButtonText('erro getNewEp'); setIsLoadingNewEp(false) });
+  }
+
+  const charge = async () => {
+    await api.post<EpisodeProps[]>('/populate/charge', {})
+      .then((e) => {
+        getEpisodeList()
+        setIsLoadingNewEp(false);
+      })
+      .catch(e => { setButtonText('erro charge'); setIsLoadingNewEp(false) });
+  }
+
   const getEpisodeList = async () => {
+    setResolution('360p');
     await api.post<EpisodeProps[]>('/fox/episodes', { universal_anime_id: data.universal_anime_id })
       .then((e) => {
         setEpisodes(e.data);
@@ -58,12 +83,12 @@ export const Episodes: React.FC = ({ navigation, route }: any) => {
   return (
     <Container>
       <HeaderContainer>
-        <Header title={data.title} />
+        <Header title={data.title} navigation={navigation} />
       </HeaderContainer>
       <Scroll>
         <Hero source={{ uri: data.image }} resizeMode='cover'>
           <Shadow>
-            <Title>{data.title}</Title>
+            <Title>{data.title + ' | ' + data.sub}</Title>
             <Subtitle>{data.alternative_name}</Subtitle>
           </Shadow>
         </Hero>
@@ -79,6 +104,7 @@ export const Episodes: React.FC = ({ navigation, route }: any) => {
             <Button active={resolution === '360p'} title='360p' onPress={() => { setResolution('360p') }} width='120px' mb="5px" />
             <Button active={resolution === '720p'} title='720p' onPress={() => { setResolution('720p') }} width='120px' mb="5px" />
             <Button active={resolution === '1080p'} title='1080p' onPress={() => { setResolution('1080p') }} width='120px' mb="5px" />
+            <Button active={resolution === 'new ep'} title={buttonText} onPress={() => { setResolution('new ep'); getNewEp() }} width='120px' mb="5px" loading={isLoadingNewEp} />
           </Item>
         </Grid>
       </Scroll>

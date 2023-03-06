@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ButtonProps } from 'react-native'
+import { ButtonProps, ActivityIndicator } from 'react-native'
 import { LinearGradientColor, Play, Flag, Button as UIButton, Content } from './styles';
 
 interface ButtonComponentsProps extends ButtonProps {
@@ -7,9 +7,10 @@ interface ButtonComponentsProps extends ButtonProps {
   width: string;
   mb?: string;
   active?: boolean;
+  loading?: boolean;
 }
 
-const Button: React.FC<ButtonComponentsProps> = ({ title, active, width, mb = false, ...props }) => {
+const Button: React.FC<ButtonComponentsProps> = ({ title, active, width, loading = false, mb = false, ...props }) => {
 
   const [isFocused, setIsFocused] = useState(false)
   const handleOnFocus = () => {
@@ -20,7 +21,7 @@ const Button: React.FC<ButtonComponentsProps> = ({ title, active, width, mb = fa
   }
   return (
     <UIButton isFocused={isFocused} active={active} width={width} mb={mb} onFocus={handleOnFocus} onBlur={handleBlur} {...props}>
-      {active ? (<LinearGradientColor>
+      {loading ? <ActivityIndicator color="#F4791F" size={35} /> : active && !loading ? (<LinearGradientColor>
         <Play color="#FFF" fill="#FFF" size={24} />
         <Flag>{title}</Flag>
       </LinearGradientColor>) : <Content>

@@ -9,12 +9,13 @@ import { List, Container, Label } from './styles';
 interface AnimeListProps {
   data: AnimeProps[];
   label: string;
+  keyToChildren: string;
   oddBackground?: boolean;
   autoFocus?: boolean;
   handleSelectAnime: (data: AnimeProps) => void;
 };
 
-const AnimeList: React.FC<AnimeListProps> = ({ data, label, autoFocus = false, oddBackground = false, handleSelectAnime }) => {
+const AnimeList: React.FC<AnimeListProps> = ({ data, keyToChildren, label, autoFocus = false, oddBackground = false, handleSelectAnime }) => {
   return (
     <Container oddBackground={oddBackground}>
       <Label>{label}</Label>
@@ -23,7 +24,7 @@ const AnimeList: React.FC<AnimeListProps> = ({ data, label, autoFocus = false, o
         horizontal
         data={data}
         renderItem={({ item, index }) => <DisplayAnime hasTVPreferredFocus={autoFocus && index === 0} onPress={() => handleSelectAnime(item)} source={{ uri: item.image }} animeData={item} />}
-        keyExtractor={(item) => item.universal_anime_id}
+        keyExtractor={(item, index) => item.universal_anime_id + '/' + index + keyToChildren}
       />
     </Container>
   );

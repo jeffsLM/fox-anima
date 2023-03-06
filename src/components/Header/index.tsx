@@ -7,9 +7,11 @@ import foxIcon from '../../assets/fox.png'
 
 interface HeaderProps extends TouchableOpacityProps {
   title?: string;
+  disabledSearch?: boolean;
+  navigation: any;
 }
 
-const Header: React.FC<HeaderProps> = ({ title, ...props }) => {
+const Header: React.FC<HeaderProps> = ({ title, navigation, disabledSearch = false, ...props }) => {
 
   const [isFocused, setIsFocused] = useState(false)
   const handleOnFocus = () => {
@@ -30,9 +32,11 @@ const Header: React.FC<HeaderProps> = ({ title, ...props }) => {
         <Title>Fox Anima {title ? ' | ' + title : ''}</Title>
       </ContentHeader>
 
-      <ToachContainer onFocus={handleOnFocus} onBlur={handleBlur} isFocused={isFocused}>
+      {!disabledSearch && <ToachContainer onFocus={handleOnFocus} onBlur={handleBlur} isFocused={isFocused} onPress={() => {
+        navigation.navigate('Search')
+      }}>
         <MagnifyingGlassIcon color="#FFF" fill="#FFF" size={24} />
-      </ToachContainer>
+      </ToachContainer>}
     </Container>
   );
 };

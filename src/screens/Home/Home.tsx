@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View } from 'react-native';
+import { View, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 import uuid from 'react-native-uuid';
 
 import { Header } from '../../components/Header'
@@ -22,6 +23,7 @@ export const Home: React.FC = ({ navigation }: any) => {
 
 
   const getLastAnime = async () => {
+    setIsLoading(true);
     await api.post<AnimeProps[]>('/fox/last')
       .then(async (e) => {
         await getAnime()
@@ -33,6 +35,7 @@ export const Home: React.FC = ({ navigation }: any) => {
   }
 
   const getAnime = async () => {
+    setIsLoadingAnimes(true);
     await api.post<AnimeProps[]>('/fox/animes')
       .then((e) => {
         setAnimes(e.data);
@@ -41,6 +44,7 @@ export const Home: React.FC = ({ navigation }: any) => {
       .catch(e => setIsLoadingAnimes(false));
   }
   const getHistory = async () => {
+    setIsLoadingHistory(true);
     const user = await AsyncStorage.getItem('@USER_ID');
     await api.post<AnimeProps[]>('/history/list', { user: JSON.parse(user || '') })
       .then((e) => {
@@ -70,23 +74,35 @@ export const Home: React.FC = ({ navigation }: any) => {
     })
   }
 
-  useEffect(() => { getLastAnime(); validateUser(); }, [])
+  useFocusEffect(
+    React.useCallback(() => {
+      getLastAnime(); validateUser();
+    }, [navigation])
+  );
 
   return (
     <Container>
       <HeaderContainer>
-        <Header />
+        <Header navigation={navigation} />
       </HeaderContainer>
       <Scroll>
-        <View style={{ flex: 1 }}>
-          {!isLoading && <AnimeList label='Lançamentos' autoFocus oddBackground data={lastAnimes} handleSelectAnime={handleSelectAnime} />}
-        </View>
-        <View style={{ flex: 1 }}>
-          {!isLoadingHistory && <AnimeList label='Histórico' autoFocus data={historyAnimes} handleSelectAnime={handleSelectAnime} />}
-        </View>
-        <View style={{ flex: 1 }}>
-          {!isLoadingAnimes && <AnimeList label='Animes' autoFocus data={animes} handleSelectAnime={handleSelectAnime} />}
-        </View>
+        {isLoading || isLoadingHistory || isLoadingAnimes ? (
+          <View style={{ flex: 1 }}>
+            <ActivityIndicator color="#F4791F" size={72} />
+          </View>
+        ) : (
+          <>
+            <View style={{ flex: 1 }}>
+              {!isLoading && <AnimeList keyToChildren='lançamentos' label='Lançamentos' autoFocus oddBackground data={lastAnimes} handleSelectAnime={handleSelectAnime} />}
+            </View>
+            <View style={{ flex: 1 }}>
+              {!isLoadingHistory && <AnimeList keyToChildren='historico' label='Histórico' data={historyAnimes} handleSelectAnime={handleSelectAnime} />}
+            </View>
+            <View style={{ flex: 1 }}>
+              {!isLoadingAnimes && <AnimeList keyToChildren='historico' label='Animes' data={animes} handleSelectAnime={handleSelectAnime} />}
+            </View>
+          </>
+        )}
       </Scroll>
     </Container>
   );

@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
 import { PlayIcon, PlayPauseIcon, ChevronDoubleRightIcon, ChevronDoubleLeftIcon } from 'react-native-heroicons/solid'
 
 import { Container, Toach } from './styles'
@@ -22,7 +21,7 @@ const PlayerControls = (props: any) => {
       </Toach>
 
       <Toach hasTVPreferredFocus onPress={playing ? onPause : onPlay} onFocus={() => { setIsFocused({ ...isFocused, playing: true }) }} onBlur={() => { setIsFocused({ ...isFocused, playing: false }) }}>
-        {playing ? <PlayPauseIcon color={isFocused.playing ? "#fff" : "#F4791F"} fill={isFocused.playing ? "#fff" : "#F4791F"} size={17} /> : <PlayIcon color={isFocused.playing ? "#fff" : "#F4791F"} fill={isFocused.playing ? "#fff" : "#F4791F"} size={24} />}
+        {playing ? <PlayPauseIcon color={isFocused.playing ? "#fff" : "#F4791F"} fill={isFocused.playing ? "#fff" : "#F4791F"} size={17} /> : <PlayIcon color={isFocused.playing ? "#fff" : "#F4791F"} fill={isFocused.playing ? "#fff" : "#F4791F"} size={17} />}
       </Toach>
 
       <Toach onPress={skipForwards} onFocus={() => { setIsFocused({ ...isFocused, skipForwards: true }) }} onBlur={() => { setIsFocused({ ...isFocused, skipForwards: false }) }}>
@@ -32,21 +31,5 @@ const PlayerControls = (props: any) => {
 
   );
 };
-
-const styles = StyleSheet.create({
-  wrapper: {
-    paddingHorizontal: 5,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
-    flex: 3,
-  },
-  touchable: {
-    padding: 5,
-  },
-  touchableDisabled: {
-    opacity: 0.3,
-  },
-});
 
 export default PlayerControls;
